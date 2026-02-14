@@ -17,5 +17,8 @@
   "dependencies": {
     "@monorepo/shared": "^0.0.1",
     "express": "^5.2.1"
+  },
+  "directories": {
+    "test": "tests"
   }
 }
