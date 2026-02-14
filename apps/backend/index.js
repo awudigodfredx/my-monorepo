@@ -12,6 +12,11 @@ app.get("/api/v1/health", (req, res) => {
 // POST messages
 app.post("/api/v1/messages", (req, res) => {
   const { message } = req.body;
+  if (!message) {
+    return res.status(400).json({
+      error: "Message is required",
+    });
+  }
   res.status(201).json({
     received: message,
   });
