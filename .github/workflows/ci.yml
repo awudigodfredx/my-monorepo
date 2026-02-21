@@ -1,0 +1,23 @@
+name: CI Test
+
+on:
+  push:
+    branches: [feature/*, development]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout code
+      - uses: actions/checkout@v3
+
+      # Step 2: Setup Node.js
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Step 3: Install dependencies
+      - run: npm install
+
+      # Step 4: Run tests
+      - run: npm run test

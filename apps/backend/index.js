@@ -24,6 +24,8 @@ app.get("/api/v1/health", (req, res) => {
 //   res.status(200).json(data);
 // });
 
+emitEvent("user_signup", { userId: 123 });
+
 // POST Messages
 app.get("/api/v1/messages", async (req, res) => {
   try {
