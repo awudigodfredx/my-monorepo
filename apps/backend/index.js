@@ -9,6 +9,7 @@ app.use(express.json());
 
 // GET Health Check
 app.get("/api/v1/health", (req, res) => {
+  // emitEvent("request_success", { path: req.path }); // ✅ Emit technical event for monitoring
   res.status(200).json({
     status: "ok",
   });
@@ -18,10 +19,10 @@ app.get("/api/v1/health", (req, res) => {
  * GET Messages
  * Passive read operation → No business analytics event
  */
-app.get("/api/v1/messages", async (req, res) => {
-  const data = await db.select().from(messages);
-  res.status(200).json(data);
-});
+// app.get("/api/v1/messages", async (req, res) => {
+//   const data = await db.select().from(messages);
+//   res.status(200).json(data);
+// });
 
 // POST Messages
 app.get("/api/v1/messages", async (req, res) => {
