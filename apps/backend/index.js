@@ -1,5 +1,7 @@
 const express = require("express");
 const { emitEvent } = require("./analytics");
+const { db } = require("./db");
+const { messages } = require("./schema");
 
 const app = express();
 
@@ -12,32 +14,63 @@ app.get("/api/v1/health", (req, res) => {
   });
 });
 
+/**
+ * GET Messages
+ * Passive read operation → No business analytics event
+ */
+app.get("/api/v1/messages", async (req, res) => {
+  const data = await db.select().from(messages);
+  res.status(200).json(data);
+});
+
 // POST Messages
-app.post("/api/v1/messages", (req, res) => {
-  emitEvent("request_received", {
-    route: "/api/v1/messages",
-  });
-
-  const { message } = req.body;
-
-  if (!message) {
-    emitEvent("request_error", {
-      route: "/api/v1/messages",
-      reason: "missing_message",
-    });
-
-    return res.status(400).json({
-      error: "Message is required",
+app.get("/api/v1/messages", async (req, res) => {
+  try {
+    const data = await db.select().from(messages);
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({
+      error: "Failed to fetch messages",
     });
   }
+});
 
-  emitEvent("request_success", {
-    route: "/api/v1/messages",
-  });
+/**
+ * POST Messages
+ * Business action → Event-worthy (message_created)
+ */
+app.post("/api/v1/messages", async (req, res) => {
+  try {
+    const { message } = req.body;
 
-  res.status(201).json({
-    received: message,
-  });
+    if (!message) {
+      return res.status(400).json({
+        error: "Message is required",
+      });
+    }
+
+    // Insert into DB
+    const result = await db.insert(messages).values({
+      message,
+    });
+
+    // ✅ Emit business-level analytics event AFTER successful DB insert
+    emitEvent("message_created", {
+      messageLength: message.length,
+    });
+
+    res.status(201).json({
+      success: true,
+      message,
+    });
+  } catch (error) {
+    console.error("Error creating message:", error);
+
+    res.status(500).json({
+      error: "Failed to create message",
+    });
+  }
 });
 
 app.listen(3001, () => {
