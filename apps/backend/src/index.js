@@ -43,5 +43,8 @@ app.post("/api/v1/messages", async (req, res) => {
   }
 });
 
-app.listen(3001, () => console.log("Backend running on port 3001"));
+if (require.main === module) {
+  app.listen(3001, () => console.log("Backend running on port 3001"));
+}
+
 module.exports = app;
