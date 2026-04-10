@@ -1,6 +1,10 @@
 import { lazy } from "react";
+import type React from "react";
 
-export const componentRegistry = {
+export const componentRegistry: Record<
+  string,
+  React.LazyExoticComponent<any>
+> = {
   Card: lazy(() => import("./Card")),
   Modal: lazy(() => import("./Modal")),
   InfoPanel: lazy(() => import("./InfoPanel")),

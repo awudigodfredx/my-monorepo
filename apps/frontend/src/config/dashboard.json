@@ -18,5 +18,12 @@
     "componentType": "InfoPanel",
     "title": "Stats",
     "content": "You have 3 projects online"
+  },
+  {
+    "id": 4,
+    "componentType": "Card",
+    "title": "Project Gamma",
+    "description": "Third project dynamically loaded",
+    "onClickType": "modal"
   }
 ]
