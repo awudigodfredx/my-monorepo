@@ -1,9 +1,18 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import DynamicRenderer from "../components/DynamicRenderer";
 import Modal from "../components/Modal";
 
-const Dashboard = () => {
-  const [sections, setSections] = useState([]);
+interface DashboardConfig {
+  id: number;
+  componentType: string;
+  title: string;
+  description?: string;
+  content?: string;
+  onClickType?: string;
+}
+
+const Dashboard: React.FC = () => {
+  const [sections, setSections] = useState<DashboardConfig[]>([]);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState({ title: "", content: "" });
 
@@ -13,7 +22,7 @@ const Dashboard = () => {
     );
   }, []);
 
-  const handleSectionClick = (section) => {
+  const handleSectionClick = (section: DashboardConfig) => {
     if (section.onClickType === "modal") {
       setModalContent({
         title: section.title,

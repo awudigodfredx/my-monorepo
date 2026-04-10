@@ -1,5 +1,0 @@
-[
-  { "type": "heading", "text": "Welcome to the Demo Page" },
-  { "type": "paragraph", "text": "This page is rendered from JSON config" },
-  { "type": "button", "label": "Click Me" }
-]
