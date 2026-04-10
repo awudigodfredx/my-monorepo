@@ -1,5 +1,3 @@
-# Godfred Project
-
 # Week 0 — Foundation & Environment Setup
 
 **Sprint:** 4th April – 11 April 2026  
