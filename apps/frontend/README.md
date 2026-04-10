@@ -347,3 +347,4 @@ Build the **Home Page Hero Section**:
 ---
 
 _Xcelsz Technology Traineeship — Knowledge Stage — Cohort 1_
+_Godfred A_
