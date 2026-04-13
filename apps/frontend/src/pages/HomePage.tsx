@@ -1,50 +1,16 @@
-import React, { useState, useEffect } from "react";
-import DynamicRenderer from "../components/DynamicRenderer";
-import Modal from "../components/Modal";
+import React from "react";
+import HeroLeft from "../components/HeroLeft";
+import HeroRight from "../components/HeroRight";
 
-interface CardConfig {
-  id: number;
-  title: string;
-  description: string;
-}
-
-const HomePage: React.FC = () => {
-  const [cards, setCards] = useState<CardConfig[]>([]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [modalContent, setModalContent] = useState({ title: "", content: "" });
-
-  useEffect(() => {
-    // Load cards dynamically from JSON
-    import("../config/cards.json").then((data) => setCards(data.default));
-  }, []);
-
-  const handleCardClick = (title: string, description: string) => {
-    setModalContent({ title, content: description });
-    setModalOpen(true);
-  };
-
-  return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {cards.map((card) => (
-        <DynamicRenderer
-          key={card.id}
-          componentName="Card"
-          props={{
-            title: card.title,
-            description: card.description,
-            onClick: () => handleCardClick(card.title, card.description),
-          }}
-        />
-      ))}
-
-      <Modal
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}
-        title={modalContent.title}
-        content={modalContent.content}
-      />
-    </div>
-  );
-};
+const HomePage: React.FC = () => (
+  <main>
+    <section className="min-h-screen flex flex-col justify-center py-20 px-6 max-w-7xl mx-auto">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <HeroLeft />
+        <HeroRight />
+      </div>
+    </section>
+  </main>
+);
 
 export default HomePage;
