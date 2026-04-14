@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { motion } from "motion/react";
+import WorkWithMeCTA from "./WorkWithMeCTA";
+import HelpMeFreeCTA from "./HelpMeFreeCTA";
 
 interface HeroConfig {
   heading: string;
@@ -50,7 +52,7 @@ const HeroLeft: React.FC = () => {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="max-w-xl text-lg leading-relaxed text-gray-600 md:text-xl"
-        data-testid="hero-paragraph"
+          data-testid="hero-paragraph"
         >
           {cfg.paragraph}
         </motion.p>
@@ -60,7 +62,11 @@ const HeroLeft: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
           className="flex flex-wrap gap-4"
-        ></motion.div>
+          data-testid="hero-ctas"
+        >
+          <WorkWithMeCTA />
+          <HelpMeFreeCTA />
+        </motion.div>
       </div>
     </>
   );
