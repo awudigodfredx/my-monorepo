@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { lazy, Suspense } from "react";
+import { trackEvent } from "../utils/analytics";
 
 // lazy-load modals — only bundled when opened
 const DeliverProjectModal = lazy(() => import("./modals/DeliverProjectModal"));
@@ -19,7 +20,6 @@ interface CtaConfig {
     options: CtaOption[];
   };
 }
-
 
 const WorkWithMeCTA: React.FC = () => {
   const [cfg, setCfg] = useState<CtaConfig | null>(null);
@@ -47,7 +47,9 @@ const WorkWithMeCTA: React.FC = () => {
 
   const handleButtonClick = () => {
     setOpen((prev) => !prev); // toggle
-    console.log(EVENTS.WORK_WITH_ME_CTA_CLICK, { timestamp: Date.now() });
+    trackEvent(EVENTS.WORK_WITH_ME_CTA_CLICK, {
+      element_id: "work-with-me-btn",
+    });
   };
 
   const handleOptionClick = (option: CtaOption) => {

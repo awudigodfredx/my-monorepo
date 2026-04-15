@@ -34,8 +34,8 @@ describe("TechCatchupModal — Slice 5C", () => {
   it("emits tech_catchup_modal_open on open", () => {
     render(<TechCatchupModal open onClose={vi.fn()} />);
     expect(console.log).toHaveBeenCalledWith(
-      "tech_catchup_modal_open",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "tech_catchup_modal_open", timestamp: expect.any(Number) }),
     );
   });
 });

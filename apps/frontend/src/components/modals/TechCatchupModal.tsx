@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
+import { trackEvent } from "../../utils/analytics";
 
 interface Props {
   open: boolean;
@@ -19,8 +20,8 @@ const TechCatchupModal: React.FC<Props> = ({ open, onClose }) => {
 
   useEffect(() => {
     if (open) {
-      console.log(EVENTS.TECH_CATCHUP_MODAL_OPEN, {
-        timestamp: Date.now(),
+      trackEvent(EVENTS.TECH_CATCHUP_MODAL_OPEN, {
+        modal_name: "tech_catchup",
         source: "help_me_free_cta",
       });
     }
@@ -58,10 +59,14 @@ const TechCatchupModal: React.FC<Props> = ({ open, onClose }) => {
 
     // Step 1 — team size
     <div key="step-1">
-      <label className="block font-mono text-xs uppercase tracking-widest mb-3">
+      <label
+        htmlFor="team-size"
+        className="block font-mono text-xs uppercase tracking-widest mb-3"
+      >
         Team size?
       </label>
       <select
+        id="team-size"
         value={form.size}
         onChange={update("size")}
         className="w-full border border-gray-200 p-3 text-sm font-mono

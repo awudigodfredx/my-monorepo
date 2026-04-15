@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
+import { trackEvent } from "../../utils/analytics";
 
 interface Props {
   open: boolean;
@@ -25,8 +26,8 @@ const DeliverProjectModal: React.FC<Props> = ({ open, onClose }) => {
   // emit analytics event when modal mounts (becomes visible)
   useEffect(() => {
     if (open) {
-      console.log(EVENTS.DELIVER_PROJECT_MODAL_OPEN, {
-        timestamp: Date.now(),
+      trackEvent(EVENTS.DELIVER_PROJECT_MODAL_OPEN, {
+        modal_name: "deliver_project",
         source: "work_with_me_cta",
       });
     }
@@ -65,7 +66,10 @@ const DeliverProjectModal: React.FC<Props> = ({ open, onClose }) => {
 
     // Step 1 — timeline
     <div key="step-1">
-      <label htmlFor="timeline" className="block font-mono text-xs uppercase tracking-widest mb-3">
+      <label
+        htmlFor="timeline"
+        className="block font-mono text-xs uppercase tracking-widest mb-3"
+      >
         What is your timeline?
       </label>
       <select
@@ -86,7 +90,10 @@ const DeliverProjectModal: React.FC<Props> = ({ open, onClose }) => {
 
     // Step 2 — budget
     <div key="step-2">
-      <label htmlFor="budget" className="block font-mono text-xs uppercase tracking-widest mb-3">
+      <label
+        htmlFor="budget"
+        className="block font-mono text-xs uppercase tracking-widest mb-3"
+      >
         Budget range?
       </label>
       <select

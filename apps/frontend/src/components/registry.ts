@@ -22,4 +22,11 @@ export const componentRegistry: Record<
   CoffeeWithMeModal: lazy(() => import("./modals/CoffeeWithMeModal")),
 
   HelpMeFreeCTA: lazy(() => import("./HelpMeFreeCTA")),
+
+  PageViewsPanel: lazy(() => import("./widgets/PageViewsPanel")),
+  ModalOpensPanel: lazy(() => import("./widgets/ModalOpensPanel")),
+
+  CTAClickPanel: lazy(() => import("./widgets/CTAClickPanel")),
+
+  Footer: lazy(() => import("./Footer")),
 };

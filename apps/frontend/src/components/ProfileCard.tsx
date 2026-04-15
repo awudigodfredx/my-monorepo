@@ -63,12 +63,6 @@ export default function ProfileCard() {
         </CardHeader>
 
         <CardContent className="p-6 pt-0">
-          <p
-            className="text-sm leading-relaxed text-gray-600 mb-4"
-            data-testid="profile-bio"
-          >
-            {profileData.bio}
-          </p>
           <div className="space-y-2" data-testid="fun-facts">
             {profileData.funFacts.map((fact, index) => (
               <div

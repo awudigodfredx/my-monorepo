@@ -80,8 +80,8 @@ describe("AuditWebsiteModal — Slice 5B", () => {
   it("emits audit_website_modal_open on open", () => {
     renderModal();
     expect(console.log).toHaveBeenCalledWith(
-      "audit_website_modal_open",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "audit_website_modal_open", timestamp: expect.any(Number) }),
     );
   });
 });

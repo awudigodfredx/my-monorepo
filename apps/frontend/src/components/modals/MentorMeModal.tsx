@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
+import { trackEvent } from "../../utils/analytics";
 
 interface Props {
   open: boolean;
@@ -25,8 +26,8 @@ const MentorMeModal: React.FC<Props> = ({ open, onClose }) => {
   // emit analytics event when modal mounts (becomes visible)
   useEffect(() => {
     if (open) {
-      console.log(EVENTS.MENTOR_ME_MODAL_OPEN, {
-        timestamp: Date.now(),
+      trackEvent(EVENTS.MENTOR_ME_MODAL_OPEN, {
+        modal_name: "mentor_me",
         source: "work_with_me_cta",
       });
     }

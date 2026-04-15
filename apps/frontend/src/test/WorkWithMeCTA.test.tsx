@@ -80,8 +80,8 @@ describe("WorkWithMeCTA — Slice 4", () => {
     render(<WorkWithMeCTA />);
     fireEvent.click(await screen.findByTestId("work-with-me-btn"));
     expect(console.log).toHaveBeenCalledWith(
-      "work_with_me_cta_click",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "work_with_me_cta_click", timestamp: expect.any(Number) }),
     );
   });
 

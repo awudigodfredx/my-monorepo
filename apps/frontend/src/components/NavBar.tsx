@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { EVENTS } from "@monorepo/shared";
+import { trackEvent } from "../utils/analytics";
 
 interface NavConfig {
   logoSrc: string;
@@ -17,10 +18,7 @@ const NavBar: React.FC = () => {
 
   const handleLogoClick = () => {
     // emit analytics only — Link handles the actual navigation
-    console.log(EVENTS.NAV_LOGO_CLICK, {
-      page: window.location.pathname,
-      timestamp: Date.now(),
-    });
+    trackEvent(EVENTS.NAV_LOGO_CLICK, {});
   };
 
   if (!config) return null;
@@ -47,15 +45,6 @@ const NavBar: React.FC = () => {
             Godfred Awudi
           </span>
         </Link>
-
-        <div className="flex items-center gap-8">
-          <Link
-            to="/"
-            className="text-xs font-mono uppercase tracking-widest hover:text-brand-accent transition-colors"
-          >
-            Home
-          </Link>
-        </div>
       </div>
     </nav>
   );

@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { lazy, Suspense } from "react";
+import { trackEvent } from "../utils/analytics";
 
+// lazy-load modals — only bundled when opened
 // ← changed: different modals
 const FifteenMinChatModal = lazy(() => import("./modals/FifteenMinChatModal"));
 const AuditWebsiteModal = lazy(() => import("./modals/AuditWebsiteModal"));
@@ -47,7 +49,9 @@ const HelpMeFreeCTA: React.FC = () => {
   const handleButtonClick = () => {
     setOpen((prev) => !prev);
     // ← changed: different event
-    console.log(EVENTS.HELP_ME_FREE_CTA_CLICK, { timestamp: Date.now() });
+    trackEvent(EVENTS.HELP_ME_FREE_CTA_CLICK, {
+      element_id: "help-me-free-btn",
+    });
   };
 
   const handleOptionClick = (option: CtaOption) => {
