@@ -1,29 +1,40 @@
 [
   {
     "id": 1,
-    "componentType": "Card",
-    "title": "Project Alpha",
-    "description": "This is my first project",
-    "onClickType": "modal"
+    "componentType": "PageViewsPanel"
   },
   {
     "id": 2,
-    "componentType": "Card",
-    "title": "Project Beta",
-    "description": "This is my second project",
-    "onClickType": "modal"
+    "componentType": "ModalOpensPanel"
   },
   {
     "id": 3,
-    "componentType": "InfoPanel",
-    "title": "Stats",
-    "content": "You have 3 projects online"
+    "componentType": "CTAClickPanel",
+    "eventKey": "work_with_me_cta_click",
+    "label": "Work With Me"
   },
   {
     "id": 4,
-    "componentType": "Card",
-    "title": "Project Gamma",
-    "description": "Third project dynamically loaded",
-    "onClickType": "modal"
+    "componentType": "CTAClickPanel",
+    "eventKey": "help_me_free_cta_click",
+    "label": "Help Me Free"
+  },
+  {
+    "id": 5,
+    "componentType": "CTAClickPanel",
+    "eventKey": "deliver_project_modal_open",
+    "label": "Deliver Project"
+  },
+  {
+    "id": 6,
+    "componentType": "CTAClickPanel",
+    "eventKey": "mentor_me_modal_open",
+    "label": "Mentor Me"
+  },
+  {
+    "id": 7,
+    "componentType": "CTAClickPanel",
+    "eventKey": "coffee_with_me_modal_open",
+    "label": "Coffee With Me"
   }
 ]

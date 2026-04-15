@@ -1,0 +1,27 @@
+{
+  "pageViews": {
+    "total": 142,
+    "trend": "+18% vs last week",
+    "byPage": [{ "page": "home", "views": 142 }]
+  },
+  "modalOpens": {
+    "total": 38,
+    "byModal": [
+      { "modal": "deliver_project", "opens": 14 },
+      { "modal": "mentor_me", "opens": 11 },
+      { "modal": "coffee_with_me", "opens": 7 },
+      { "modal": "fifteen_min_chat", "opens": 4 },
+      { "modal": "audit_website", "opens": 2 }
+    ]
+  },
+  "ctaClicks": {
+    "work_with_me_cta_click": { "total": 31, "trend": "+12%" },
+    "help_me_free_cta_click": { "total": 19, "trend": "+8%" },
+    "deliver_project_modal_open": { "total": 14, "trend": "+5%" },
+    "mentor_me_modal_open": { "total": 11, "trend": "+22%" },
+    "coffee_with_me_modal_open": { "total": 7, "trend": "+3%" },
+    "fifteen_min_chat_modal_open": { "total": 4, "trend": "new" },
+    "audit_website_modal_open": { "total": 2, "trend": "new" },
+    "tech_catchup_modal_open": { "total": 1, "trend": "new" }
+  }
+}
