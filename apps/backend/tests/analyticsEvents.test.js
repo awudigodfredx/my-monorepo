@@ -39,8 +39,20 @@ describe("POST /api/v1/analytics/events", () => {
         type: "hero_view",
         url: "http://localhost:5173/",
         sessionId: "abc123",
+        ctaId: null,
         payload: null,
       }),
+    );
+  });
+
+  it("persists ctaId when provided", async () => {
+    const { db } = require("../db");
+    db.insert.mockClear();
+    const body = { ...validBody, ctaId: "work_with_me_btn" };
+    await request(app).post("/api/v1/analytics/events").send(body);
+    const valuesFn = db.insert.mock.results[0].value.values;
+    expect(valuesFn).toHaveBeenCalledWith(
+      expect.objectContaining({ ctaId: "work_with_me_btn" }),
     );
   });
 

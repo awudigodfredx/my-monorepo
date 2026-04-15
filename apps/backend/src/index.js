@@ -1,7 +1,8 @@
 const express = require("express");
 const { emitEvent } = require("../analytics");
 const { db } = require("../db");
-const { messages, analyticsEvents } = require("../schema");
+const { messages } = require("../schema");
+const { saveAnalyticsEvent } = require("./services/analyticsService");
 
 const app = express();
 app.use(express.json());
@@ -47,9 +48,34 @@ app.post("/api/v1/messages", async (req, res) => {
  * POST /api/v1/analytics/events
  * Ingests a frontend analytics event and persists it to the database.
  */
+/**
+ * GET /api/v1/analytics/summary
+ * Returns event counts grouped by type for the admin dashboard.
+ */
+app.get("/api/v1/analytics/summary", async (_req, res) => {
+  try {
+    const { analyticsEvents } = require("../schema");
+    const { sql } = require("drizzle-orm");
+    const rows = await db
+      .select({
+        type: analyticsEvents.type,
+        count: sql`COUNT(*)`.mapWith(Number),
+      })
+      .from(analyticsEvents)
+      .groupBy(analyticsEvents.type);
+
+    // shape: { page_view: 42, cta_work_click: 7, ... }
+    const summary = Object.fromEntries(rows.map((r) => [r.type, r.count]));
+    res.status(200).json(summary);
+  } catch (error) {
+    console.error("Error fetching analytics summary:", error);
+    res.status(500).json({ error: "Failed to fetch summary" });
+  }
+});
+
 app.post("/api/v1/analytics/events", async (req, res) => {
   try {
-    const { type, url, sessionId, payload } = req.body;
+    const { type, url, sessionId, ctaId, payload } = req.body;
 
     if (!type || !url || !sessionId) {
       return res.status(400).json({
@@ -57,17 +83,41 @@ app.post("/api/v1/analytics/events", async (req, res) => {
       });
     }
 
-    await db.insert(analyticsEvents).values({
-      type,
-      url,
-      sessionId,
-      payload: payload ? JSON.stringify(payload) : null,
-    });
+    await saveAnalyticsEvent({ type, url, sessionId, ctaId, payload });
 
     res.status(201).json({ success: true });
   } catch (error) {
     console.error("Error saving analytics event:", error);
     res.status(500).json({ error: "Failed to save event" });
+  }
+});
+
+/**
+ * POST /api/v1/analytics/events/batch
+ * Ingests an array of frontend analytics events in a single request.
+ */
+app.post("/api/v1/analytics/events/batch", async (req, res) => {
+  try {
+    const { events } = req.body;
+
+    if (!Array.isArray(events) || events.length === 0) {
+      return res.status(400).json({ error: "events must be a non-empty array" });
+    }
+
+    for (const ev of events) {
+      const { type, url, sessionId, ctaId, payload } = ev;
+      if (!type || !url || !sessionId) {
+        return res.status(400).json({
+          error: "each event must include type, url, and sessionId",
+        });
+      }
+      await saveAnalyticsEvent({ type, url, sessionId, ctaId, payload });
+    }
+
+    res.status(201).json({ success: true, count: events.length });
+  } catch (error) {
+    console.error("Error saving analytics batch:", error);
+    res.status(500).json({ error: "Failed to save batch" });
   }
 });
 

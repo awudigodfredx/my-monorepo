@@ -1,26 +1,50 @@
 // apps/frontend/src/components/widgets/PageViewsPanel.tsx
 import React, { useEffect, useState } from "react";
 
-interface PageView {
-  page: string;
-  views: number;
-}
-interface PageViewsData {
-  total: number;
-  trend: string;
-  byPage: PageView[];
-}
+const API_BASE =
+  (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
+
+const PAGE_VIEW_EVENTS = [
+  "hero_view",
+  "hero_profile_card_view",
+  "nav_logo_click",
+];
 
 const PageViewsPanel: React.FC = () => {
-  const [data, setData] = useState<PageViewsData | null>(null);
+  const [summary, setSummary] = useState<Record<string, number> | null>(null);
 
   useEffect(() => {
-    import("../../config/analyticsData.json").then((d) =>
-      setData(d.default.pageViews),
-    );
+    fetch(`${API_BASE}/api/v1/analytics/summary`)
+      .then((r) => r.json())
+      .then((data: Record<string, number>) => setSummary(data))
+      .catch(() => setSummary({}));
   }, []);
 
-  if (!data) return null;
+  if (summary === null) {
+    return (
+      <div
+        className="bg-white border-2 border-brand-primary p-6
+                   shadow-[4px_4px_0px_0px_rgba(20,20,20,1)] animate-pulse"
+        data-testid="page-views-panel"
+      >
+        <div className="h-3 w-24 bg-gray-200 rounded mb-4" />
+        <div className="h-10 w-16 bg-gray-200 rounded mb-4" />
+        <div className="space-y-2">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="flex justify-between">
+              <div className="h-3 w-20 bg-gray-100 rounded" />
+              <div className="h-3 w-8 bg-gray-100 rounded" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  const total = PAGE_VIEW_EVENTS.reduce(
+    (sum, key) => sum + (summary[key] ?? 0),
+    0,
+  );
 
   return (
     <div
@@ -36,26 +60,20 @@ const PageViewsPanel: React.FC = () => {
           className="text-4xl font-display font-bold"
           data-testid="page-views-total"
         >
-          {data.total}
-        </span>
-        <span
-          className="text-xs font-mono text-brand-accent"
-          data-testid="page-views-trend"
-        >
-          {data.trend}
+          {total}
         </span>
       </div>
       <div className="space-y-2">
-        {data.byPage.map((p) => (
-          <div key={p.page} className="flex justify-between items-center">
+        {PAGE_VIEW_EVENTS.map((key) => (
+          <div key={key} className="flex justify-between items-center">
             <span className="text-xs font-mono uppercase text-gray-500">
-              {p.page}
+              {key.replace(/_/g, " ")}
             </span>
             <span
               className="text-xs font-mono font-bold"
-              data-testid={`page-views-${p.page}`}
+              data-testid={`page-views-${key}`}
             >
-              {p.views}
+              {summary[key] ?? 0}
             </span>
           </div>
         ))}

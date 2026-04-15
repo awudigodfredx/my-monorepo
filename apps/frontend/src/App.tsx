@@ -12,6 +12,7 @@ import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
+import ConsentBanner from "./components/ConsentBanner";
 
 // separate component so it can use useLocation inside Router
 const RouteTracker: React.FC = () => {
@@ -31,6 +32,7 @@ const App: React.FC = () => (
   <Router>
     <div className="min-h-screen bg-brand-bg selection:bg-brand-accent selection:text-white">
       <RouteTracker /> {/* ← fires page_view on every route change */}
+      <ConsentBanner />
       <NavBar />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />

@@ -10,14 +10,14 @@
   {
     "id": 3,
     "componentType": "CTAClickPanel",
-    "eventKey": "work_with_me_cta_click",
+    "eventKey": "cta_work_click",
     "label": "Work With Me"
   },
   {
     "id": 4,
     "componentType": "CTAClickPanel",
-    "eventKey": "help_me_free_cta_click",
-    "label": "Help Me Free"
+    "eventKey": "cta_connect_click",
+    "label": "Connect With Me"
   },
   {
     "id": 5,

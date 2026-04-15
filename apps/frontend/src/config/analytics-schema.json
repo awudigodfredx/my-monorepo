@@ -1,0 +1,88 @@
+{
+  "version": "1.0",
+  "events": [
+    {
+      "name": "hero_view",
+      "description": "Fires when the hero section mounts on the home page",
+      "trigger": "page load",
+      "fields": ["page_name", "referrer"]
+    },
+    {
+      "name": "hero_profile_card_view",
+      "description": "Fires when the profile card becomes visible",
+      "trigger": "component mount"
+    },
+    {
+      "name": "nav_logo_click",
+      "description": "Fires when the nav logo is clicked",
+      "trigger": "click",
+      "fields": ["page"]
+    },
+    {
+      "name": "cta_work_click",
+      "description": "Fires when the Work With Me CTA button is clicked",
+      "trigger": "click",
+      "ctaId": "work-with-me-btn"
+    },
+    {
+      "name": "cta_connect_click",
+      "description": "Fires when the Connect With Me CTA button is clicked",
+      "trigger": "click",
+      "ctaId": "help-me-free-btn"
+    },
+    {
+      "name": "deliver_project_modal_open",
+      "description": "Fires when the Deliver My Project modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "mentor_me_modal_open",
+      "description": "Fires when the Mentor Me modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "coffee_with_me_modal_open",
+      "description": "Fires when the Coffee With Me modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "fifteen_min_chat_modal_open",
+      "description": "Fires when the 15 Min Chat modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "audit_website_modal_open",
+      "description": "Fires when the Audit My Website modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "tech_catchup_modal_open",
+      "description": "Fires when the Tech Catch-Up modal opens",
+      "trigger": "modal open",
+      "fields": ["modal_name", "source"]
+    },
+    {
+      "name": "modal_open",
+      "description": "Generic modal open event fired by ModalShell",
+      "trigger": "modal open",
+      "fields": ["modal_title"]
+    },
+    {
+      "name": "modal_close",
+      "description": "Generic modal close event fired by ModalShell",
+      "trigger": "modal close",
+      "fields": ["modal_title"]
+    },
+    {
+      "name": "hero_lead_created",
+      "description": "Fires after a lead is successfully submitted to the backend",
+      "trigger": "form submit",
+      "fields": ["source"]
+    }
+  ]
+}
