@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal as MUIModal, Box } from "@mui/material";
+import { EVENTS } from "@monorepo/shared";
+import { trackEvent } from "../../utils/analytics";
 
 interface ModalShellProps {
   open: boolean;
@@ -27,8 +29,20 @@ const ModalShell: React.FC<ModalShellProps> = ({
   isFirst,
   isLast,
   onSubmit,
-}) => (
-  <MUIModal open={open} onClose={onClose}>
+}) => {
+  useEffect(() => {
+    if (open) {
+      trackEvent(EVENTS.MODAL_OPEN, { modal_title: title });
+    }
+  }, [open, title]);
+
+  const handleClose = () => {
+    trackEvent(EVENTS.MODAL_CLOSE, { modal_title: title });
+    onClose();
+  };
+
+  return (
+    <MUIModal open={open} onClose={handleClose}>
     <Box
       sx={{
         position: "absolute",
@@ -52,7 +66,8 @@ const ModalShell: React.FC<ModalShellProps> = ({
           {title}
         </h2>
         <button
-          onClick={onClose}
+          type="button"
+          onClick={handleClose}
           data-testid="modal-close"
           className="text-gray-400 hover:text-gray-700"
         >
@@ -80,6 +95,7 @@ const ModalShell: React.FC<ModalShellProps> = ({
       <div className="flex justify-between">
         {!isFirst && (
           <button
+            type="button"
             onClick={onBack}
             data-testid="modal-back"
             className="text-sm font-mono uppercase tracking-wider"
@@ -89,6 +105,7 @@ const ModalShell: React.FC<ModalShellProps> = ({
         )}
         {isLast ? (
           <button
+            type="button"
             onClick={onSubmit}
             data-testid="modal-submit"
             className="bg-brand-primary text-white px-6 py-2 text-sm font-mono uppercase"
@@ -97,6 +114,7 @@ const ModalShell: React.FC<ModalShellProps> = ({
           </button>
         ) : (
           <button
+            type="button"
             onClick={onNext}
             disabled={!onNext}
             data-testid="modal-next"
@@ -108,6 +126,7 @@ const ModalShell: React.FC<ModalShellProps> = ({
       </div>
     </Box>
   </MUIModal>
-);
+  );
+};
 
 export default ModalShell;

@@ -8,7 +8,6 @@ vi.mock("../config/profile.json", () => ({
     avatar: "/test-avatar.jpg",
     name: "Godfred Awudi",
     title: "Analyst • Builder • Creative",
-    bio: "I work at the intersection of software, data, strategy, and design.",
     funFacts: [
       "Data-driven thinker",
       "System builder",
@@ -44,11 +43,6 @@ describe("ProfileCard — Slice 3", () => {
     expect(screen.getByTestId("profile-title")).toHaveTextContent(
       "Analyst • Builder • Creative",
     );
-  });
-
-  it("renders bio from profile.json", () => {
-    render(<ProfileCard />);
-    expect(screen.getByTestId("profile-bio")).toBeInTheDocument();
   });
 
   it("renders all three fun facts", () => {

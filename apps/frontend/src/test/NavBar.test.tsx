@@ -71,8 +71,9 @@ describe("NavBar — Slice 1", () => {
     const link = await screen.findByTestId("nav-logo-link");
     fireEvent.click(link);
     expect(console.log).toHaveBeenCalledWith(
-      "nav_logo_click",
+      "[analytics]",
       expect.objectContaining({
+        event: "nav_logo_click",
         page: expect.any(String),
         timestamp: expect.any(Number),
       }),

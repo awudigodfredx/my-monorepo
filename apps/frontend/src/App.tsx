@@ -1,19 +1,43 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { EVENTS } from "@monorepo/shared";
+import { trackEvent } from "./utils/analytics";
 import Dashboard from "./pages/Dashboard";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+
+// separate component so it can use useLocation inside Router
+const RouteTracker: React.FC = () => {
+  const location = useLocation();
+
+  useEffect(() => {
+    trackEvent(EVENTS.PAGE_VIEW, {
+      page_name: location.pathname,
+      referrer: document.referrer,
+    });
+  }, [location.pathname]);
+
+  return null;
+};
 
 const App: React.FC = () => (
   <Router>
     <div className="min-h-screen bg-brand-bg selection:bg-brand-accent selection:text-white">
+      <RouteTracker /> {/* ← fires page_view on every route change */}
       <NavBar />
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/" element={<HomePage />} />
       </Routes>
+      <Footer />
     </div>
   </Router>
 );

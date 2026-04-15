@@ -14,6 +14,5 @@ export interface ProfileConfig {
   avatar: string;
   name: string;
   title: string;
-  bio: string;
   funFacts: string[];
 }

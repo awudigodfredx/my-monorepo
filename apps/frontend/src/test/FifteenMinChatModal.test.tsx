@@ -32,8 +32,8 @@ describe("FifteenMinChatModal — Slice 5A", () => {
   it("emits fifteen_min_chat_modal_open on open", () => {
     render(<FifteenMinChatModal open onClose={vi.fn()} />);
     expect(console.log).toHaveBeenCalledWith(
-      "fifteen_min_chat_modal_open",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "fifteen_min_chat_modal_open", timestamp: expect.any(Number) }),
     );
   });
 });

@@ -7,7 +7,6 @@ vi.mock("../config/profile.json", () => ({
     avatar: "/test-avatar.jpg",
     name: "Godfred Awudi",
     title: "Analyst • Builder • Creative",
-    bio: "Test bio.",
     funFacts: ["Data-driven thinker"],
   },
 }));

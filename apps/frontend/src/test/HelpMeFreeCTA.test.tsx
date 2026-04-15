@@ -68,8 +68,8 @@ describe("HelpMeFreeCTA — Slice 5", () => {
     render(<HelpMeFreeCTA />);
     fireEvent.click(await screen.findByTestId("help-me-free-btn"));
     expect(console.log).toHaveBeenCalledWith(
-      "help_me_free_cta_click",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "help_me_free_cta_click", timestamp: expect.any(Number) }),
     );
   });
 

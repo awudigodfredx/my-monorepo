@@ -3,7 +3,7 @@ import { EVENTS } from "@monorepo/shared";
 import { motion } from "motion/react";
 import WorkWithMeCTA from "./WorkWithMeCTA";
 import HelpMeFreeCTA from "./HelpMeFreeCTA";
-
+import { trackEvent } from "../utils/analytics";
 interface HeroConfig {
   heading: string;
   subheading: string;
@@ -15,9 +15,8 @@ const HeroLeft: React.FC = () => {
 
   useEffect(() => {
     import("../config/hero.json").then((d) => setCfg(d.default));
-    console.log(EVENTS.PAGE_VIEW, {
-      page: "home",
-      timestamp: Date.now(),
+    trackEvent(EVENTS.PAGE_VIEW, {
+      page_name: "home",
       referrer: document.referrer,
     });
   }, []);

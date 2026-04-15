@@ -13,6 +13,10 @@ export const trackEvent = (
     ...payload,
   };
   console.log("[analytics]", event); // ← replace with real service later
+
+  // store in memory for dashboard and testing
+  if (!window.__analyticsEvents) window.__analyticsEvents = [];
+  window.__analyticsEvents.push(event);
 };
 
 // Usage in components:

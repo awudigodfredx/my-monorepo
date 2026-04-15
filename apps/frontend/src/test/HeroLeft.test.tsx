@@ -43,9 +43,10 @@ describe("HeroLeft — Slice 2", () => {
     render(<HeroLeft />);
     await screen.findByTestId("hero-heading"); // wait for mount + effect
     expect(console.log).toHaveBeenCalledWith(
-      "page_view",
+      "[analytics]",
       expect.objectContaining({
-        page: "home",
+        event: "page_view",
+        page_name: "home",
         timestamp: expect.any(Number),
       }),
     );

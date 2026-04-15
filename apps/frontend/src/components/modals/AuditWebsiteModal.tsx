@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
+import { trackEvent } from "../../utils/analytics";
 
 interface Props {
   open: boolean;
@@ -22,8 +23,8 @@ const AuditWebsiteModal: React.FC<Props> = ({ open, onClose }) => {
 
   useEffect(() => {
     if (open) {
-      console.log(EVENTS.AUDIT_WEBSITE_MODAL_OPEN, {
-        timestamp: Date.now(),
+      trackEvent(EVENTS.AUDIT_WEBSITE_MODAL_OPEN, {
+        modal_name: "audit_website",
         source: "help_me_free_cta",
       });
     }

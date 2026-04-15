@@ -71,8 +71,8 @@ describe("DeliverProjectModal — Slice 4A", () => {
   it("emits deliver_project_modal_open when open becomes true", () => {
     renderModal(true);
     expect(console.log).toHaveBeenCalledWith(
-      "deliver_project_modal_open",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "deliver_project_modal_open", timestamp: expect.any(Number) }),
     );
   });
 });

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
+import { trackEvent } from "../../utils/analytics";
 
 interface Props {
   open: boolean;
@@ -19,8 +20,8 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
 
   useEffect(() => {
     if (open) {
-      console.log(EVENTS.FIFTEEN_MIN_CHAT_MODAL_OPEN, {
-        timestamp: Date.now(),
+      trackEvent(EVENTS.FIFTEEN_MIN_CHAT_MODAL_OPEN, {
+        modal_name: "fifteen_min_chat",
         source: "help_me_free_cta",
       });
     }
