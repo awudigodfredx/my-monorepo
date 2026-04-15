@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { hasConsent, setConsent } from "../utils/consent";
+import { setConsent } from "../utils/consent";
 
 const ConsentBanner: React.FC = () => {
   const [visible, setVisible] = useState(false);

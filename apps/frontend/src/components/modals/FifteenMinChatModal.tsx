@@ -163,6 +163,7 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
       <p className="text-sm text-gray-600 leading-relaxed mb-4">
         I will reach out within 24 hours to confirm your 15-minute slot.
       </p>
+      {submitting && <p className="text-xs text-brand-primary animate-pulse">Submitting...</p>}
       {submitError && <p className="text-xs text-red-500">{submitError}</p>}
     </div>,
   ];
