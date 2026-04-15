@@ -1,7 +1,7 @@
 const express = require("express");
 const { emitEvent } = require("../analytics");
 const { db } = require("../db");
-const { messages } = require("../schema");
+const { messages, analyticsEvents } = require("../schema");
 
 const app = express();
 app.use(express.json());
@@ -40,6 +40,34 @@ app.post("/api/v1/messages", async (req, res) => {
   } catch (error) {
     console.error("Error creating message:", error);
     res.status(500).json({ error: "Failed to create message" });
+  }
+});
+
+/**
+ * POST /api/v1/analytics/events
+ * Ingests a frontend analytics event and persists it to the database.
+ */
+app.post("/api/v1/analytics/events", async (req, res) => {
+  try {
+    const { type, url, sessionId, payload } = req.body;
+
+    if (!type || !url || !sessionId) {
+      return res.status(400).json({
+        error: "type, url, and sessionId are required",
+      });
+    }
+
+    await db.insert(analyticsEvents).values({
+      type,
+      url,
+      sessionId,
+      payload: payload ? JSON.stringify(payload) : null,
+    });
+
+    res.status(201).json({ success: true });
+  } catch (error) {
+    console.error("Error saving analytics event:", error);
+    res.status(500).json({ error: "Failed to save event" });
   }
 });
 

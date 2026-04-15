@@ -21,4 +21,13 @@ const heroLeads = mysqlTable("hero_leads", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-module.exports = { messages, heroLeads };
+const analyticsEvents = mysqlTable("analytics_events", {
+  id: int("id").primaryKey().autoincrement(),
+  type: varchar("type", { length: 100 }).notNull(),
+  url: varchar("url", { length: 2048 }).notNull(),
+  sessionId: varchar("session_id", { length: 36 }).notNull(),
+  payload: text("payload"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+module.exports = { messages, heroLeads, analyticsEvents };

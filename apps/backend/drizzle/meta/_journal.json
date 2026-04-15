@@ -15,6 +15,13 @@
       "when": 1776287494546,
       "tag": "0001_aromatic_sleeper",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1776289032295,
+      "tag": "0002_dapper_ozymandias",
+      "breakpoints": true
     }
   ]
 }
