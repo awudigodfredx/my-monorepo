@@ -8,6 +8,13 @@
       "when": 1771626693273,
       "tag": "0000_violet_gladiator",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1776287494546,
+      "tag": "0001_aromatic_sleeper",
+      "breakpoints": true
     }
   ]
 }

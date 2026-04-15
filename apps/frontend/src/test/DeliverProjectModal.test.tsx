@@ -29,10 +29,10 @@ describe("DeliverProjectModal — Slice 4A", () => {
     );
   });
 
-  it("shows 4 step progress bars", () => {
+  it("shows 5 step progress bars", () => {
     renderModal();
     expect(screen.getByTestId("step-bar-0")).toBeInTheDocument();
-    expect(screen.getByTestId("step-bar-3")).toBeInTheDocument();
+    expect(screen.getByTestId("step-bar-4")).toBeInTheDocument();
   });
 
   it("starts on step 0 — project textarea visible", () => {
@@ -53,12 +53,35 @@ describe("DeliverProjectModal — Slice 4A", () => {
     expect(screen.getByTestId("step-0-project")).toBeInTheDocument();
   });
 
-  it("reaches step 3 confirmation after 3 Next clicks", () => {
+  it("shows name and email fields on step 3", () => {
     renderModal();
     fireEvent.click(screen.getByTestId("modal-next")); // → step 1
     fireEvent.click(screen.getByTestId("modal-next")); // → step 2
     fireEvent.click(screen.getByTestId("modal-next")); // → step 3
-    expect(screen.getByTestId("step-3-confirmation")).toBeInTheDocument();
+    expect(screen.getByTestId("step-3-name")).toBeInTheDocument();
+    expect(screen.getByTestId("step-3-email")).toBeInTheDocument();
+  });
+
+  it("Next is disabled on step 3 until name and valid email are entered", () => {
+    renderModal();
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 1
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 2
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 3
+    expect(screen.getByTestId("modal-next")).toBeDisabled();
+    fireEvent.change(screen.getByTestId("step-3-name"), { target: { value: "Jane" } });
+    fireEvent.change(screen.getByTestId("step-3-email"), { target: { value: "jane@example.com" } });
+    expect(screen.getByTestId("modal-next")).not.toBeDisabled();
+  });
+
+  it("reaches step 4 confirmation after completing all steps", () => {
+    renderModal();
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 1
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 2
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 3
+    fireEvent.change(screen.getByTestId("step-3-name"), { target: { value: "Jane" } });
+    fireEvent.change(screen.getByTestId("step-3-email"), { target: { value: "jane@example.com" } });
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 4
+    expect(screen.getByTestId("step-4-confirmation")).toBeInTheDocument();
     expect(screen.getByTestId("modal-submit")).toBeInTheDocument();
   });
 

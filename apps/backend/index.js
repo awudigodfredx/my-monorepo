@@ -1,7 +1,7 @@
 const express = require("express");
 const { emitEvent } = require("./analytics");
 const { db } = require("./db");
-const { messages } = require("./schema");
+const { messages, heroLeads } = require("./schema");
 
 const app = express();
 
@@ -73,6 +73,36 @@ app.post("/api/v1/messages", async (req, res) => {
     res.status(500).json({
       error: "Failed to create message",
     });
+  }
+});
+
+/**
+ * POST /api/v1/hero/lead
+ * Captures a lead submission from the hero section modals.
+ */
+app.post("/api/v1/hero/lead", async (req, res) => {
+  try {
+    const { name, email, message, source } = req.body;
+
+    if (!name || !email || !message || !source) {
+      return res.status(400).json({
+        error: "name, email, message, and source are required",
+      });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: "Invalid email address" });
+    }
+
+    await db.insert(heroLeads).values({ name, email, message, source });
+
+    emitEvent("hero_lead_created", { source });
+
+    res.status(201).json({ success: true });
+  } catch (error) {
+    console.error("Error creating hero lead:", error);
+    res.status(500).json({ error: "Failed to create lead" });
   }
 });
 
