@@ -11,7 +11,7 @@ vi.mock("../config/hero.json", () => ({
 }));
 
 vi.mock("@monorepo/shared", () => ({
-  EVENTS: { PAGE_VIEW: "page_view" },
+  EVENTS: { PAGE_VIEW: "hero_view" },
 }));
 
 describe("HeroLeft — Slice 2", () => {
@@ -45,7 +45,7 @@ describe("HeroLeft — Slice 2", () => {
     expect(console.log).toHaveBeenCalledWith(
       "[analytics]",
       expect.objectContaining({
-        event: "page_view",
+        event: "hero_view",
         page_name: "home",
         timestamp: expect.any(Number),
       }),

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { EVENTS } from "@monorepo/shared";
 import { motion } from "motion/react";
 import ProfileCard from "./ProfileCard";
+import { trackEvent } from "../utils/analytics";
 
 interface ProfileConfig {
   avatar: string;
@@ -15,10 +16,22 @@ const HeroRight: React.FC = () => {
 
   useEffect(() => {
     import("../config/profile.json").then((d) => setProfile(d.default));
-    console.log(EVENTS.HERO_PROFILE_CARD_VIEW, { timestamp: Date.now() });
+    trackEvent(EVENTS.HERO_PROFILE_CARD_VIEW);
   }, []);
 
-  if (!profile) return null;
+  if (!profile)
+    return (
+      <div className="animate-pulse rounded-2xl bg-gray-100 p-6 space-y-4 w-72" data-testid="profile-skeleton">
+        <div className="mx-auto h-24 w-24 rounded-full bg-gray-200" />
+        <div className="h-5 w-2/3 mx-auto rounded bg-gray-200" />
+        <div className="h-4 w-1/2 mx-auto rounded bg-gray-200" />
+        <div className="space-y-2 pt-2">
+          <div className="h-4 w-full rounded bg-gray-200" />
+          <div className="h-4 w-full rounded bg-gray-200" />
+          <div className="h-4 w-full rounded bg-gray-200" />
+        </div>
+      </div>
+    );
 
   return (
     <motion.div

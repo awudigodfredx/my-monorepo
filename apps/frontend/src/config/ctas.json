@@ -16,7 +16,7 @@
     ]
   },
   "helpMeFree": {
-    "label": "Help me free",
+    "label": "Connect With Me",
     "options": [
       { "id": "chat", "label": "15 min chat", "modal": "FifteenMinChatModal" },
       {

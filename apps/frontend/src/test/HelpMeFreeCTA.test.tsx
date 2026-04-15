@@ -5,7 +5,7 @@ import HelpMeFreeCTA from "../components/HelpMeFreeCTA";
 vi.mock("../config/ctas.json", () => ({
   default: {
     helpMeFree: {
-      label: "Help me free",
+      label: "Connect With Me",
       options: [
         { id: "chat", label: "15 min chat", modal: "FifteenMinChatModal" },
         { id: "audit", label: "Audit my website", modal: "AuditWebsiteModal" },
@@ -20,7 +20,7 @@ vi.mock("../config/ctas.json", () => ({
 }));
 
 vi.mock("@monorepo/shared", () => ({
-  EVENTS: { HELP_ME_FREE_CTA_CLICK: "help_me_free_cta_click" },
+  EVENTS: { HELP_ME_FREE_CTA_CLICK: "cta_connect_click" },
 }));
 
 vi.mock("../components/modals/FifteenMinChatModal", () => ({
@@ -44,7 +44,7 @@ describe("HelpMeFreeCTA — Slice 5", () => {
   it("renders the button from config", async () => {
     render(<HelpMeFreeCTA />);
     const btn = await screen.findByTestId("help-me-free-btn");
-    expect(btn).toHaveTextContent("Help me free");
+    expect(btn).toHaveTextContent("Connect With Me");
   });
 
   it("selector hidden before button click", async () => {
@@ -69,7 +69,7 @@ describe("HelpMeFreeCTA — Slice 5", () => {
     fireEvent.click(await screen.findByTestId("help-me-free-btn"));
     expect(console.log).toHaveBeenCalledWith(
       "[analytics]",
-      expect.objectContaining({ event: "help_me_free_cta_click", timestamp: expect.any(Number) }),
+      expect.objectContaining({ event: "cta_connect_click", timestamp: expect.any(Number) }),
     );
   });
 

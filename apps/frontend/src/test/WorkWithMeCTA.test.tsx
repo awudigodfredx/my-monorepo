@@ -21,7 +21,7 @@ vi.mock("../config/ctas.json", () => ({
 
 vi.mock("@monorepo/shared", () => ({
   EVENTS: {
-    WORK_WITH_ME_CTA_CLICK: "work_with_me_cta_click",
+    WORK_WITH_ME_CTA_CLICK: "cta_work_click",
     DELIVER_PROJECT_MODAL_OPEN: "deliver_project_modal_open",
     MENTOR_ME_MODAL_OPEN: "mentor_me_modal_open",
     COFFEE_WITH_ME_MODAL_OPEN: "coffee_with_me_modal_open",
@@ -81,7 +81,7 @@ describe("WorkWithMeCTA — Slice 4", () => {
     fireEvent.click(await screen.findByTestId("work-with-me-btn"));
     expect(console.log).toHaveBeenCalledWith(
       "[analytics]",
-      expect.objectContaining({ event: "work_with_me_cta_click", timestamp: expect.any(Number) }),
+      expect.objectContaining({ event: "cta_work_click", timestamp: expect.any(Number) }),
     );
   });
 

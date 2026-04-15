@@ -21,7 +21,23 @@ const HeroLeft: React.FC = () => {
     });
   }, []);
 
-  if (!cfg) return null;
+  if (!cfg)
+    return (
+      <div className="space-y-8 animate-pulse" data-testid="hero-skeleton">
+        <div className="space-y-4">
+          <div className="h-20 w-3/4 rounded bg-gray-200" />
+          <div className="h-6 w-1/2 rounded bg-gray-200" />
+        </div>
+        <div className="space-y-2">
+          <div className="h-4 w-full rounded bg-gray-200" />
+          <div className="h-4 w-5/6 rounded bg-gray-200" />
+        </div>
+        <div className="flex gap-4">
+          <div className="h-10 w-36 rounded bg-gray-200" />
+          <div className="h-10 w-36 rounded bg-gray-200" />
+        </div>
+      </div>
+    );
 
   return (
     <>

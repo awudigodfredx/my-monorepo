@@ -32,8 +32,8 @@ describe("HeroRight — Slice 3 analytics", () => {
     render(<HeroRight />);
     await screen.findByTestId("profile-card");
     expect(console.log).toHaveBeenCalledWith(
-      "hero_profile_card_view",
-      expect.objectContaining({ timestamp: expect.any(Number) }),
+      "[analytics]",
+      expect.objectContaining({ event: "hero_profile_card_view", timestamp: expect.any(Number) }),
     );
   });
 });
