@@ -15,4 +15,11 @@ export const componentRegistry: Record<
   HeroRight: lazy(() => import("./HeroRight")),
   ProfileCard: lazy(() => import("./ProfileCard")),
   FunFacts: lazy(() => import("./FunFacts")),
+
+  WorkWithMeCTA: lazy(() => import("./HelpMeFreeCTA")),
+  DeliverProjectModal: lazy(() => import("./modals/DeliverProjectModal")),
+  MentorMeModal: lazy(() => import("./modals/MentorMeModal")),
+  CoffeeWithMeModal: lazy(() => import("./modals/CoffeeWithMeModal")),
+
+  HelpMeFreeCTA: lazy(() => import("./HelpMeFreeCTA")),
 };
