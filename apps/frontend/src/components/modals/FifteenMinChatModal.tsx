@@ -12,11 +12,22 @@ interface Props {
 interface FormState {
   topic: string;
   time: string;
+  name: string;
+  email: string;
 }
 
+const API_BASE = (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
+
 const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
-  const { step, next, back, reset, isFirst, isLast } = useModalStepper(3);
-  const [form, setForm] = useState<FormState>({ topic: "", time: "" });
+  const { step, next, back, reset, isFirst, isLast } = useModalStepper(5);
+  const [form, setForm] = useState<FormState>({
+    topic: "",
+    time: "",
+    name: "",
+    email: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -29,8 +40,38 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
 
   const handleClose = () => {
     reset();
+    setSubmitError(null);
     onClose();
   };
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch(`${API_BASE}/api/v1/hero/lead`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          message: `Topic: ${form.topic}\nTime: ${form.time}`,
+          source: "fifteen_min_chat",
+        }),
+      });
+      if (!res.ok) throw new Error("Submission failed");
+      trackEvent(EVENTS.REQUEST_SUCCESS, { source: "fifteen_min_chat" });
+      handleClose();
+    } catch {
+      setSubmitError("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email);
+  const nextHandler =
+    step === 3 && (!form.name.trim() || !emailValid) ? undefined : next;
+
   const update =
     (field: keyof FormState) =>
     (
@@ -50,9 +91,8 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
         value={form.topic}
         onChange={update("topic")}
         rows={3}
-        placeholder="e.g. career advice, technical question, project review..."
-        className="w-full border border-gray-200 p-3 text-sm font-mono
-                   focus:outline-none focus:border-brand-primary resize-none"
+        placeholder="e.g. career advice, technical question..."
+        className="w-full border border-gray-200 p-3 text-sm font-mono focus:outline-none focus:border-brand-primary resize-none"
         data-testid="step-0-topic"
       />
     </div>,
@@ -69,8 +109,7 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
         id="time-slot"
         value={form.time}
         onChange={update("time")}
-        className="w-full border border-gray-200 p-3 text-sm font-mono
-                   focus:outline-none focus:border-brand-primary"
+        className="w-full border border-gray-200 p-3 text-sm font-mono focus:outline-none focus:border-brand-primary"
         data-testid="step-1-time"
       >
         <option value="">Select time...</option>
@@ -81,14 +120,50 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
       </select>
     </div>,
 
-    // Step 2 — confirmation
-    <div key="step-2" data-testid="step-2-confirmation">
+    // Step 2 — name
+    <div key="step-2">
+      <label className="block font-mono text-xs uppercase tracking-widest mb-3">
+        Your name
+      </label>
+      <input
+        type="text"
+        value={form.name}
+        onChange={update("name")}
+        placeholder="Full name"
+        className="w-full border border-gray-200 p-3 text-sm font-mono focus:outline-none focus:border-brand-primary"
+        data-testid="step-2-name"
+      />
+    </div>,
+
+    // Step 3 — email
+    <div key="step-3">
+      <label className="block font-mono text-xs uppercase tracking-widest mb-3">
+        Email address
+      </label>
+      <input
+        type="email"
+        value={form.email}
+        onChange={update("email")}
+        placeholder="you@example.com"
+        className="w-full border border-gray-200 p-3 text-sm font-mono focus:outline-none focus:border-brand-primary"
+        data-testid="step-3-email"
+      />
+      {form.email && !emailValid && (
+        <p className="mt-1 text-xs text-red-500">
+          Please enter a valid email address
+        </p>
+      )}
+    </div>,
+
+    // Step 4 — confirmation
+    <div key="step-4" data-testid="step-4-confirmation">
       <p className="font-mono text-xs uppercase tracking-widest text-brand-accent mb-4">
-        Booked
+        Ready to book
       </p>
-      <p className="text-sm text-gray-600 leading-relaxed">
+      <p className="text-sm text-gray-600 leading-relaxed mb-4">
         I will reach out within 24 hours to confirm your 15-minute slot.
       </p>
+      {submitError && <p className="text-xs text-red-500">{submitError}</p>}
     </div>,
   ];
 
@@ -98,12 +173,12 @@ const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
       onClose={handleClose}
       title="15 min chat"
       step={step}
-      totalSteps={3}
+      totalSteps={5}
       isFirst={isFirst}
       isLast={isLast}
       onBack={back}
-      onNext={next}
-      onSubmit={handleClose}
+      onNext={nextHandler}
+      onSubmit={handleSubmit}
     >
       {steps[step]}
     </ModalShell>

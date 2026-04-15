@@ -7,7 +7,10 @@ import {
 } from "react-router-dom";
 import { EVENTS } from "@monorepo/shared";
 import { trackEvent } from "./utils/analytics";
+import { AdminAuthProvider } from "./context/AdminAuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import LoginPage from "./pages/LoginPage";
 import AboutPage from "./pages/AboutPage";
 import HomePage from "./pages/HomePage";
 import NavBar from "./components/NavBar";
@@ -29,19 +32,29 @@ const RouteTracker: React.FC = () => {
 };
 
 const App: React.FC = () => (
-  <Router>
-    <div className="min-h-screen bg-brand-bg selection:bg-brand-accent selection:text-white">
-      <RouteTracker /> {/* ← fires page_view on every route change */}
-      <ConsentBanner />
-      <NavBar />
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/" element={<HomePage />} />
-      </Routes>
-      <Footer />
-    </div>
-  </Router>
+  <AdminAuthProvider>
+    <Router>
+      <div className="min-h-screen bg-brand-bg selection:bg-brand-accent selection:text-white">
+        <RouteTracker /> {/* ← fires page_view on every route change */}
+        <ConsentBanner />
+        <NavBar />
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/" element={<HomePage />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
+  </AdminAuthProvider>
 );
 
 export default App;

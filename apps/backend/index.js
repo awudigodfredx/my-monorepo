@@ -1,4 +1,6 @@
 const express = require("express");
+const cors = require("cors");
+const { sql } = require("drizzle-orm");
 const { emitEvent } = require("./analytics");
 const { db } = require("./db");
 const { messages, heroLeads, analyticsEvents } = require("./schema");
@@ -6,6 +8,28 @@ const { messages, heroLeads, analyticsEvents } = require("./schema");
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+  methods: ["GET", "POST", "OPTIONS", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// -- Simple Auth Middleware --
+const checkAdmin = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const password = process.env.ADMIN_PASSWORD || "admin123";
+
+  if (authHeader === `Basic ${Buffer.from(`admin:${password}`).toString("base64")}`) {
+    return next();
+  }
+  
+  if (authHeader === password) {
+    return next();
+  }
+
+  res.status(401).json({ error: "Unauthorized" });
+};
 
 // GET Health Check
 app.get("/api/v1/health", (req, res) => {
@@ -131,6 +155,67 @@ app.post("/api/v1/analytics/events", async (req, res) => {
   } catch (error) {
     console.error("Error saving analytics event:", error);
     res.status(500).json({ error: "Failed to save event" });
+  }
+});
+
+/**
+ * POST /api/v1/analytics/events/batch
+ * Ingests a batch of frontend analytics events and persists them to the database.
+ */
+app.post("/api/v1/analytics/events/batch", async (req, res) => {
+  try {
+    const { events } = req.body;
+
+    if (!events || !Array.isArray(events)) {
+      return res.status(400).json({
+        error: "events array is required",
+      });
+    }
+
+    // Insert all events in the batch
+    const values = events.map((e) => ({
+      type: e.type,
+      url: e.url,
+      sessionId: e.sessionId,
+      payload: e.payload ? JSON.stringify(e.payload) : null,
+    }));
+
+    if (values.length > 0) {
+      await db.insert(analyticsEvents).values(values);
+    }
+
+    res.status(201).json({ success: true });
+  } catch (error) {
+    console.error("Error saving analytics event batch:", error);
+    res.status(500).json({ error: "Failed to save batch" });
+  }
+});
+
+/**
+ * GET /api/v1/analytics/summary
+ * Returns aggregated counts of all events, grouped by type.
+ * Protected: Requires admin authentication.
+ */
+app.get("/api/v1/analytics/summary", checkAdmin, async (req, res) => {
+  try {
+    const results = await db
+      .select({
+        type: analyticsEvents.type,
+        count: sql`count(*)`.as("count"),
+      })
+      .from(analyticsEvents)
+      .groupBy(analyticsEvents.type);
+
+    // transform [{type: 'page_view', count: 5}] into {page_view: 5}
+    const summary = results.reduce((acc, curr) => {
+      acc[curr.type] = Number(curr.count);
+      return acc;
+    }, {});
+
+    res.status(200).json(summary);
+  } catch (error) {
+    console.error("Error fetching analytics summary:", error);
+    res.status(500).json({ error: "Failed to fetch summary" });
   }
 });
 

@@ -5,6 +5,7 @@ const {
   text,
   timestamp,
 } = require("drizzle-orm/mysql-core");
+const { sql } = require("drizzle-orm");
 
 const messages = mysqlTable("messages", {
   id: int("id").primaryKey().autoincrement(),
@@ -22,13 +23,16 @@ const heroLeads = mysqlTable("hero_leads", {
 });
 
 const analyticsEvents = mysqlTable("analytics_events", {
-  id: int("id").primaryKey().autoincrement(),
+  // UUID primary key — matches the PDM spec (event_id: UUID)
+  id: varchar("id", { length: 36 })
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
   type: varchar("type", { length: 100 }).notNull(),
   url: varchar("url", { length: 2048 }).notNull(),
   sessionId: varchar("session_id", { length: 36 }).notNull(),
   ctaId: varchar("cta_id", { length: 100 }),
   payload: text("payload"),
-  createdAt: timestamp("created_at").defaultNow(),
+  createdAt: timestamp("created_at").default(sql`CURRENT_TIMESTAMP`),
 });
 
 module.exports = { messages, heroLeads, analyticsEvents };

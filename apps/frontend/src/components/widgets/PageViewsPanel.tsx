@@ -1,8 +1,4 @@
-// apps/frontend/src/components/widgets/PageViewsPanel.tsx
-import React, { useEffect, useState } from "react";
-
-const API_BASE =
-  (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
+import React from "react";
 
 const PAGE_VIEW_EVENTS = [
   "hero_view",
@@ -10,17 +6,18 @@ const PAGE_VIEW_EVENTS = [
   "nav_logo_click",
 ];
 
-const PageViewsPanel: React.FC = () => {
-  const [summary, setSummary] = useState<Record<string, number> | null>(null);
+interface PageViewsPanelProps {
+  summary: Record<string, number>;
+  loading: boolean;
+  error: boolean;
+}
 
-  useEffect(() => {
-    fetch(`${API_BASE}/api/v1/analytics/summary`)
-      .then((r) => r.json())
-      .then((data: Record<string, number>) => setSummary(data))
-      .catch(() => setSummary({}));
-  }, []);
-
-  if (summary === null) {
+const PageViewsPanel: React.FC<PageViewsPanelProps> = ({
+  summary,
+  loading,
+  error,
+}) => {
+  if (loading) {
     return (
       <div
         className="bg-white border-2 border-brand-primary p-6
@@ -41,10 +38,47 @@ const PageViewsPanel: React.FC = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div
+        className="bg-white border-2 border-red-400 p-6
+                   shadow-[4px_4px_0px_0px_rgba(20,20,20,1)]"
+        data-testid="page-views-panel"
+      >
+        <p className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-2">
+          Page views
+        </p>
+        <p className="font-mono text-xs text-red-500 mt-4" role="alert" data-testid="page-views-error">
+          Service unavailable — could not load data.
+        </p>
+      </div>
+    );
+  }
+
   const total = PAGE_VIEW_EVENTS.reduce(
     (sum, key) => sum + (summary[key] ?? 0),
     0,
   );
+
+  if (total === 0) {
+    return (
+      <div
+        className="bg-white border-2 border-brand-primary p-6
+                   shadow-[4px_4px_0px_0px_rgba(20,20,20,1)]"
+        data-testid="page-views-panel"
+      >
+        <p className="font-mono text-xs uppercase tracking-widest text-gray-400 mb-2">
+          Page views
+        </p>
+        <p
+          className="font-mono text-xs text-gray-400 mt-4"
+          data-testid="page-views-empty"
+        >
+          No page view data yet.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div
