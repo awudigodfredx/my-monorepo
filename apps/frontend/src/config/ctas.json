@@ -1,0 +1,34 @@
+{
+  "workWithMe": {
+    "label": "Work with me",
+    "options": [
+      {
+        "id": "deliver",
+        "label": "Deliver my project",
+        "modal": "DeliverProjectModal"
+      },
+      { "id": "mentor", "label": "Mentor me", "modal": "MentorMeModal" },
+      {
+        "id": "coffee",
+        "label": "Coffee with me",
+        "modal": "CoffeeWithMeModal"
+      }
+    ]
+  },
+  "helpMeFree": {
+    "label": "Help me free",
+    "options": [
+      { "id": "chat", "label": "15 min chat", "modal": "FifteenMinChatModal" },
+      {
+        "id": "audit",
+        "label": "Audit my website",
+        "modal": "AuditWebsiteModal"
+      },
+      {
+        "id": "catchup",
+        "label": "1-2-many tech catch up",
+        "modal": "TechCatchupModal"
+      }
+    ]
+  }
+}
