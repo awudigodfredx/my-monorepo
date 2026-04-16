@@ -3,6 +3,7 @@ import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
 import { trackEvent } from "../../utils/analytics";
+import { API_BASE } from "../../config/api";
 
 interface Props {
   open: boolean;
@@ -51,8 +52,7 @@ const DeliverProjectModal: React.FC<Props> = ({ open, onClose }) => {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const base = (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
-      const res = await fetch(`${base}/api/v1/hero/lead`, {
+      const res = await fetch(`${API_BASE}/api/v1/hero/lead`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

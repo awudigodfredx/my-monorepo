@@ -7,9 +7,7 @@ import ModalOpensPanel from "../components/widgets/ModalOpensPanel";
 import CTAClickPanel from "../components/widgets/CTAClickPanel";
 import KPIPanel from "../components/widgets/KPIPanel";
 import EngagementChart from "../components/widgets/EngagementChart";
-
-const API_BASE =
-  (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
+import { API_BASE } from "../config/api";
 
 const CTA_PANELS = [
   { eventKey: "cta_work_click", label: "Work With Me" },

@@ -1,10 +1,9 @@
 import { hasConsent } from "./consent";
+import { API_BASE } from "../config/api";
 
 // Simple session ID — persists for the browser tab lifetime
 const SESSION_ID = crypto.randomUUID();
 
-const API_BASE =
-  (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
 const TRACKING_ENABLED =
   import.meta.env.VITE_ANALYTICS_TRACKING_ENABLED !== "false";
 

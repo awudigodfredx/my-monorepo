@@ -3,6 +3,7 @@ import { EVENTS } from "@monorepo/shared";
 import { useModalStepper } from "../../hooks/useModalStepper";
 import ModalShell from "./ModalShell";
 import { trackEvent } from "../../utils/analytics";
+import { API_BASE } from "../../config/api";
 
 interface Props {
   open: boolean;
@@ -16,7 +17,6 @@ interface FormState {
   email: string;
 }
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) ?? "http://localhost:3001";
 
 const FifteenMinChatModal: React.FC<Props> = ({ open, onClose }) => {
   const { step, next, back, reset, isFirst, isLast } = useModalStepper(5);
