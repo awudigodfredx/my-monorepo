@@ -1,5 +1,5 @@
 const request = require("supertest");
-const app = require("../src/index");
+const app = require("../index");
 const { emitEvent } = require("../analytics");
 
 // Mock the analytics module

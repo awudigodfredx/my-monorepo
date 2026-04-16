@@ -22,11 +22,20 @@ describe("FifteenMinChatModal — Slice 5A", () => {
     expect(screen.getByTestId("modal-title")).toHaveTextContent("15 min chat");
   });
 
-  it("reaches confirmation after 2 Next clicks", () => {
+  it("reaches confirmation after 4 Next clicks", () => {
     render(<FifteenMinChatModal open onClose={vi.fn()} />);
     fireEvent.click(screen.getByTestId("modal-next")); // → step 1
     fireEvent.click(screen.getByTestId("modal-next")); // → step 2
-    expect(screen.getByTestId("step-2-confirmation")).toBeInTheDocument();
+    
+    // Step 2 is name — required
+    fireEvent.change(screen.getByTestId("step-2-name"), { target: { value: "John Doe" } });
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 3
+    
+    // Step 3 is email — required + valid format
+    fireEvent.change(screen.getByTestId("step-3-email"), { target: { value: "john@example.com" } });
+    fireEvent.click(screen.getByTestId("modal-next")); // → step 4
+    
+    expect(screen.getByTestId("step-4-confirmation")).toBeInTheDocument();
   });
 
   it("emits fifteen_min_chat_modal_open on open", () => {

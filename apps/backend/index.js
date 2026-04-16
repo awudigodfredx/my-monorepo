@@ -33,7 +33,7 @@ const checkAdmin = (req, res, next) => {
 
 // GET Health Check
 app.get("/api/v1/health", (req, res) => {
-  // emitEvent("request_success", { path: req.path }); // ✅ Emit technical event for monitoring
+  emitEvent("request_success", { path: req.path }); // ✅ Emit technical event for monitoring
   res.status(200).json({
     status: "ok",
   });
@@ -48,9 +48,8 @@ app.get("/api/v1/health", (req, res) => {
 //   res.status(200).json(data);
 // });
 
-emitEvent("user_signup", { userId: 123 });
 
-// POST Messages
+// GET Messages
 app.get("/api/v1/messages", async (req, res) => {
   try {
     const data = await db.select().from(messages);
@@ -166,9 +165,9 @@ app.post("/api/v1/analytics/events/batch", async (req, res) => {
   try {
     const { events } = req.body;
 
-    if (!events || !Array.isArray(events)) {
+    if (!events || !Array.isArray(events) || events.length === 0) {
       return res.status(400).json({
-        error: "events array is required",
+        error: "events must be a non-empty array",
       });
     }
 
@@ -180,11 +179,9 @@ app.post("/api/v1/analytics/events/batch", async (req, res) => {
       payload: e.payload ? JSON.stringify(e.payload) : null,
     }));
 
-    if (values.length > 0) {
-      await db.insert(analyticsEvents).values(values);
-    }
+    await db.insert(analyticsEvents).values(values);
 
-    res.status(201).json({ success: true });
+    res.status(201).json({ success: true, count: values.length });
   } catch (error) {
     console.error("Error saving analytics event batch:", error);
     res.status(500).json({ error: "Failed to save batch" });
@@ -219,7 +216,11 @@ app.get("/api/v1/analytics/summary", checkAdmin, async (req, res) => {
   }
 });
 
-const port = process.env.PORT || 3001;
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
+if (require.main === module) {
+  const port = process.env.PORT || 3001;
+  app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
+  });
+}
+
+module.exports = app;
