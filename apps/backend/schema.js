@@ -6,6 +6,7 @@ const {
   timestamp,
 } = require("drizzle-orm/mysql-core");
 const { sql } = require("drizzle-orm");
+const crypto = require("crypto");
 
 const messages = mysqlTable("messages", {
   id: int("id").primaryKey().autoincrement(),

@@ -127,7 +127,7 @@ app.post("/api/v1/hero/lead", async (req, res) => {
 
     res.status(201).json({ success: true });
   } catch (error) {
-    console.error("Error creating hero lead:", error);
+    console.error("DIAGNOSTIC: Error creating hero lead:", error.stack);
     res.status(500).json({ error: "Failed to create lead" });
   }
 });
@@ -186,7 +186,7 @@ app.post("/api/v1/analytics/events/batch", async (req, res) => {
 
     res.status(201).json({ success: true, count: values.length });
   } catch (error) {
-    console.error("Error saving analytics event batch:", error);
+    console.error("DIAGNOSTIC: Error saving analytics event batch:", error.stack);
     res.status(500).json({ error: "Failed to save batch" });
   }
 });
@@ -214,7 +214,7 @@ app.get("/api/v1/analytics/summary", checkAdmin, async (req, res) => {
 
     res.status(200).json(summary);
   } catch (error) {
-    console.error("Error fetching analytics summary:", error);
+    console.error("DIAGNOSTIC: Error fetching analytics summary:", error.stack);
     res.status(500).json({ error: "Failed to fetch summary" });
   }
 });
